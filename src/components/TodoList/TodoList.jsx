@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import CreateTask from '../Modal/CreateTask';
+import { useEffect, useState } from 'react';
+import CreateTask from '../ModalCreateTask/ModalCreateTask';
+import ModalTask from '../ModalTask';
 
 const TodoList = () => {
   const [modal, setModal] = useState(false);
@@ -8,12 +9,28 @@ const TodoList = () => {
   const handleToggle = () => {
     setModal(!modal);
   };
-  // console.log(modal);
+
+  useEffect(() => {
+    let data = localStorage.getItem('taskList');
+
+    if (data) {
+      let res = JSON.parse(data);
+
+      setListTask(res);
+    }
+  }, []);
+
   const saveTask = (task) => {
-    setListTask([...listTask, task]);
+    const updateTask = [...listTask, task];
+    setListTask(updateTask);
+
+    localStorage.setItem('taskList', JSON.stringify(updateTask));
+
+    setModal(false);
   };
 
   console.log(listTask);
+
   return (
     <div>
       <div className="text-center w-full bg-gray-100 py-8">
@@ -26,6 +43,11 @@ const TodoList = () => {
         </button>
       </div>
       <CreateTask isOpen={modal} toggle={handleToggle} saveTask={saveTask} />
+      <div className="flex gap-4 flex-wrap justify-center mt-4">
+        {listTask.map((task, i) => (
+          <ModalTask task={task} key={i} />
+        ))}
+      </div>
     </div>
   );
 };

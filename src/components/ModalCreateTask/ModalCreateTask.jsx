@@ -8,10 +8,10 @@ const CreateTask = ({ isOpen, toggle, saveTask }) => {
     e.preventDefault();
 
     console.log(taskName, description);
-    const task = { name: taskName, description: description };
-    console.log(task);
-
-    saveTask(task);
+    if (taskName.trim() !== '' && description.trim() !== '') {
+      const task = { name: taskName, description: description };
+      saveTask(task);
+    }
 
     setTaskName('');
     setDescription('');
@@ -20,7 +20,7 @@ const CreateTask = ({ isOpen, toggle, saveTask }) => {
   console.log(isOpen);
   if (isOpen) {
     return (
-      <div className="fixed bg-gray-100 top-0 left-0 right-0 bottom-0">
+      <div className="fixed bg-gray-100 top-0 left-0 right-0 bottom-0 z-10">
         <div className="w-4/5 sm:w-1/2 bg-gray-200 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <form className="flex flex-col p-4 bg-white">
             <label className="flex flex-col">
