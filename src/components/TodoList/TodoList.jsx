@@ -21,15 +21,32 @@ const TodoList = () => {
   }, []);
 
   const saveTask = (task) => {
-    const updateTask = [...listTask, task];
-    setListTask(updateTask);
+    const saveTask = [...listTask, task];
 
-    localStorage.setItem('taskList', JSON.stringify(updateTask));
+    localStorage.setItem('taskList', JSON.stringify(saveTask));
+    setListTask(saveTask);
 
     setModal(false);
   };
 
-  console.log(listTask);
+  const deleteTask = (index) => {
+    listTask.splice(index, 1);
+
+    localStorage.setItem('taskList', JSON.stringify(listTask));
+    setListTask([...listTask]);
+  };
+
+  const updateTask = (task, index) => {
+    const updateTask = [...listTask];
+
+    console.log(updateTask);
+    updateTask[index] = task;
+    console.log(updateTask);
+
+    localStorage.setItem('taskList', JSON.stringify(updateTask));
+
+    setListTask(updateTask);
+  };
 
   return (
     <div>
@@ -44,8 +61,14 @@ const TodoList = () => {
       </div>
       <CreateTask isOpen={modal} toggle={handleToggle} saveTask={saveTask} />
       <div className="flex gap-4 flex-wrap justify-center mt-4">
-        {listTask.map((task, i) => (
-          <ModalTask task={task} key={i} />
+        {listTask.map((task, index) => (
+          <ModalTask
+            task={task}
+            key={index}
+            index={index}
+            deleteTask={deleteTask}
+            updateTask={updateTask}
+          />
         ))}
       </div>
     </div>

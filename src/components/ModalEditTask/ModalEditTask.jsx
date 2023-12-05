@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CreateTask = ({ isOpen, toggle, saveTask }) => {
+const ModalEditTask = ({ task, index, isOpen, editModal, updateTask }) => {
   const [taskName, setTaskName] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    setTaskName(task.name);
+    setDescription(task.description);
+  }, [task, index]);
+
+  const handleEditSubmit = (e) => {
     e.preventDefault();
+    const updata = { ...task, name: taskName, description: description };
 
-    if (taskName.trim() !== '' && description.trim() !== '') {
-      const task = { name: taskName, description: description };
+    updateTask(updata, index);
 
-      saveTask(task);
-    }
-
-    setTaskName('');
-    setDescription('');
+    editModal();
   };
 
   if (isOpen) {
@@ -44,11 +45,14 @@ const CreateTask = ({ isOpen, toggle, saveTask }) => {
           <div className="bg-white flex gap-2 justify-center pb-4">
             <button
               className="bg-blue-400 py-1 px-2 rounded"
-              onClick={handleSubmit}
+              onClick={handleEditSubmit}
             >
               Save
             </button>
-            <button className="bg-red-500 py-1 px-2 rounded" onClick={toggle}>
+            <button
+              className="bg-red-500 py-1 px-2 rounded"
+              onClick={editModal}
+            >
               Cancel
             </button>
           </div>
@@ -58,4 +62,4 @@ const CreateTask = ({ isOpen, toggle, saveTask }) => {
   }
 };
 
-export default CreateTask;
+export default ModalEditTask;
